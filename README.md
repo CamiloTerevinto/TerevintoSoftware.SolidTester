@@ -1,0 +1,1 @@
+# TerevintoSoftware.SolidTester
