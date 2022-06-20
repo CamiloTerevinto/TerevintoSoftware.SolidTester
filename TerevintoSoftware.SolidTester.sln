@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerevintoSoftware.SolidTester", "TerevintoSoftware.SolidTester\TerevintoSoftware.SolidTester.csproj", "{464AC1C1-5779-40A2-AF78-C4AC389D9234}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{51CFD1DC-49FE-4125-BBD5-7D8AFC20BC98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerevintoSoftware.SolidTester.Tests", "tests\TerevintoSoftware.SolidTester.Tests\TerevintoSoftware.SolidTester.Tests.csproj", "{AF712071-6F16-41B9-BB4E-89D592531A7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLibrary", "tests\SampleLibrary\SampleLibrary.csproj", "{51090A5A-82F2-4EF9-95B9-76769E5EECCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerevintoSoftware.SolidTester.Tool", "TerevintoSoftware.SolidTester.Tool\TerevintoSoftware.SolidTester.Tool.csproj", "{3EC18767-6B43-4687-B033-1D51302659F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{464AC1C1-5779-40A2-AF78-C4AC389D9234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{464AC1C1-5779-40A2-AF78-C4AC389D9234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{464AC1C1-5779-40A2-AF78-C4AC389D9234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{464AC1C1-5779-40A2-AF78-C4AC389D9234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF712071-6F16-41B9-BB4E-89D592531A7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF712071-6F16-41B9-BB4E-89D592531A7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF712071-6F16-41B9-BB4E-89D592531A7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF712071-6F16-41B9-BB4E-89D592531A7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51090A5A-82F2-4EF9-95B9-76769E5EECCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51090A5A-82F2-4EF9-95B9-76769E5EECCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51090A5A-82F2-4EF9-95B9-76769E5EECCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51090A5A-82F2-4EF9-95B9-76769E5EECCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EC18767-6B43-4687-B033-1D51302659F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EC18767-6B43-4687-B033-1D51302659F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EC18767-6B43-4687-B033-1D51302659F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EC18767-6B43-4687-B033-1D51302659F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AF712071-6F16-41B9-BB4E-89D592531A7B} = {51CFD1DC-49FE-4125-BBD5-7D8AFC20BC98}
+		{51090A5A-82F2-4EF9-95B9-76769E5EECCF} = {51CFD1DC-49FE-4125-BBD5-7D8AFC20BC98}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2CA21E2F-6CDC-45DF-BAAC-ED37E2AA0A88}
+	EndGlobalSection
+EndGlobal
