@@ -9,14 +9,7 @@ public class FixtureGenerationService
 
     public async Task GenerateFixturesAsync()
     {
-        var model = new FixtureModel
-        {
-            ClassName = nameof(SampleLibrary.SuperUsefulService),
-            ClassNamespace = null!,
-            BaseNamespace = "SampleLibrary.Tests",
-            RequiredUsings = ReflectionHelpers.FindReferencedUsingsForType(typeof(SampleLibrary.SuperUsefulService)),
-            Dependencies = ReflectionHelpers.FindConstructorDependencies(typeof(SampleLibrary.SuperUsefulService)),
-        };
+        var model = ReflectionHelpers.BuildModel("SampleLibrary.Tests", typeof(SampleLibrary.SuperUsefulService));
 
         var template = new FixtureTemplate(model);
 

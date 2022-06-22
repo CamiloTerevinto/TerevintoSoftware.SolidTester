@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection.Metadata;
+using System.Text;
 using TerevintoSoftware.SolidTester.Models;
 
 namespace TerevintoSoftware.SolidTester.Templates;
@@ -84,6 +85,14 @@ internal class FixtureTemplate
         
         AddConstructor(_fixtureModel.ClassName);
 
+        _builder.AppendLine();
+
+        AddCreateSut(_fixtureModel.ClassName);
+
+        _builder.AppendLine();
+
+        AddTests();
+
         EndBlock(0);
 
         return _builder.ToString();
@@ -102,6 +111,8 @@ internal class FixtureTemplate
         {
             _builder.AppendLine("using Moq;");
         }
+
+        _builder.AppendLine("using NUnit;");
     }
 
     private void AddNamespace(string ns)
@@ -168,6 +179,85 @@ internal class FixtureTemplate
         }
 
         EndBlock(1);
+    }
+
+    private void AddCreateSut(string className)
+    {
+        const string methodTemplate = "private {0} CreateSystemUnderTestInstance()";
+        const string constructorTemplate = "return new {0}({1});";
+
+        AddIndented(string.Format(methodTemplate, className), 1);
+        BeginBlock(1);
+
+        var parameters = new string[_fixtureModel.Dependencies.Count];
+        var i = 0;
+
+        foreach (var dependency in _fixtureModel.Dependencies)
+        {
+            if (dependency.IsInterface)
+            {
+                var name = _context.Interfaces.Single(x => x.Type == dependency).Name;
+
+                parameters[i++] = $"_{name}.Object";
+            }
+            else
+            {
+                var name = _context.Classes.Single(x => x.Type == dependency).Name;
+
+                parameters[i++] =  $"_{name}";
+            }
+        }
+
+        var joined = string.Join(", ", parameters);
+
+        AddIndented(string.Format(constructorTemplate, className, joined), 2);
+
+        EndBlock(1);
+    }
+
+    private void AddTests()
+    {
+        const string testTemplate = "[Test]";
+        const string syncMethodTemplate = "public void Test_{0}()";
+        const string asyncMethodTemplate = "public async Task Test_{0}()";
+        const string arrangeComment = "// Arrange";
+        const string createSutInstanceTemplate = "var sut = CreateSystemUnderTestInstance();"; 
+        const string actComment = "// Act";
+        const string assertComment = "// Assert";
+
+        foreach (var method in _fixtureModel.Methods)
+        {
+            var name = method.Name;
+
+            AddIndented(testTemplate, 1);
+
+            if (method.IsAsync)
+            {
+                AddIndented(string.Format(asyncMethodTemplate, name), 1);
+            }
+            else
+            {
+                AddIndented(string.Format(syncMethodTemplate, name), 1);
+            }
+
+            BeginBlock(1);
+
+            AddIndented(arrangeComment, 2);
+
+            AddIndented(createSutInstanceTemplate, 2);
+
+            _builder.AppendLine();
+
+            AddIndented(actComment, 2);
+
+            _builder.AppendLine();
+
+            AddIndented(assertComment, 2);
+
+            EndBlock(1);
+
+            _builder.AppendLine();
+        }
     }
 
     private void BeginBlock(int indentationLevel)

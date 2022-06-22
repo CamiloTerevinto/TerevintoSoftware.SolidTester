@@ -1,5 +1,7 @@
 using SampleLibrary;
+using System.Threading.Tasks;
 using Moq;
+using NUnit;
 
 namespace SampleLibrary.Tests;
 
@@ -16,4 +18,21 @@ public class SuperUsefulServiceTest
         _someDependencyService = _mockRepository.Create<ISomeDependencyService>();
         _superOptions = new SuperOptions();
     }
+
+    private SuperUsefulService CreateSystemUnderTestInstance()
+    {
+        return new SuperUsefulService(_someDependencyService.Object, _superOptions);
+    }
+
+    [Test]
+    public async Task Test_ExecuteOperationAsync()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTestInstance();
+
+        // Act
+
+        // Assert
+    }
+
 }

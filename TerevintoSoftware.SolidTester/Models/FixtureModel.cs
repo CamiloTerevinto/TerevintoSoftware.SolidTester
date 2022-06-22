@@ -1,15 +1,21 @@
+#nullable disable
+
 namespace TerevintoSoftware.SolidTester.Models;
 
 public class FixtureModel 
 {
     public string BaseNamespace { get; set; }
     public string ClassName { get; set; }
-    public string? ClassNamespace { get; set; }
+    public string ClassNamespace { get; set; }
 
     public IReadOnlyCollection<Type> Dependencies { get; set; }
     public IReadOnlyCollection<string> RequiredUsings { get; set; }
+    public IReadOnlyCollection<TestableMethod> Methods { get; set; }
+}
 
-    public FixtureModel()
-    {
-    }
+public class TestableMethod
+{
+    public string Name { get; set; }
+    public bool IsAsync { get; set; }
+
 }
