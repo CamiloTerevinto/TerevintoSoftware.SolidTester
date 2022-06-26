@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using System.Text;
+﻿using System.Text;
 using TerevintoSoftware.SolidTester.Models;
 
 namespace TerevintoSoftware.SolidTester.Templates;
@@ -10,8 +9,8 @@ internal class FixtureTemplate
     {
         public class Dependency
         {
-            public Type Type { get; set; }
-            public string Name { get; set; }
+            public Type Type { get; }
+            public string Name { get; }
 
             public Dependency(Type type, string name)
             {
@@ -21,8 +20,8 @@ internal class FixtureTemplate
         }
 
         public bool UsingMocks { get; }
-        public IReadOnlyCollection<Dependency> Interfaces { get; } = default!;
-        public IReadOnlyCollection<Dependency> Classes { get; } = default!;
+        public IReadOnlyCollection<Dependency> Interfaces { get; }
+        public IReadOnlyCollection<Dependency> Classes { get; }
 
         public Context(IReadOnlyCollection<Type> declaredDependencies)
         {
@@ -65,7 +64,7 @@ internal class FixtureTemplate
     public FixtureTemplate(FixtureModel fixtureModel)
     {
         _context = new Context(fixtureModel.Dependencies);
-        _fixtureModel = fixtureModel;        
+        _fixtureModel = fixtureModel;
     }
 
     internal string GetTemplate()
@@ -73,7 +72,7 @@ internal class FixtureTemplate
         AddUsings(_fixtureModel.RequiredUsings);
         _builder.AppendLine();
 
-        AddNamespace(_fixtureModel.ClassNamespace == null ? _fixtureModel.BaseNamespace : $"{_fixtureModel.BaseNamespace}.{_fixtureModel.ClassNamespace}");
+        AddNamespace(_fixtureModel.ClassNamespace);
         _builder.AppendLine();
 
         AddClassDeclaration(_fixtureModel.ClassName);
@@ -82,7 +81,7 @@ internal class FixtureTemplate
         AddDependenciesAsFields();
 
         _builder.AppendLine();
-        
+
         AddConstructor(_fixtureModel.ClassName);
 
         _builder.AppendLine();
@@ -122,7 +121,8 @@ internal class FixtureTemplate
 
     private void AddClassDeclaration(string className)
     {
-        _builder.AppendLine($"[TestFixture]\npublic class {className}Test");
+        _builder.AppendLine("[TestFixture]");
+        _builder.AppendLine($"public class {className}Test");
     }
 
     private void AddDependenciesAsFields()
@@ -132,11 +132,11 @@ internal class FixtureTemplate
             const string moqRepository = "private readonly MockRepository _mockRepository;";
             const string mockTemplate = "private readonly Mock<{0}> _{1};";
 
-            AddIndented(moqRepository, 1);
+            AddIndented(1, moqRepository);
 
             foreach (var dependency in _context.Interfaces)
             {
-                AddIndented(string.Format(mockTemplate, dependency.Type.Name, dependency.Name), 1);
+                AddFormatIndented(1, mockTemplate, dependency.Type.Name, dependency.Name);
             }
         }
 
@@ -146,7 +146,7 @@ internal class FixtureTemplate
 
             foreach (var dependency in _context.Classes)
             {
-                AddIndented(string.Format(template, dependency.Type.Name, dependency.Name), 1);
+                AddFormatIndented(1, template, dependency.Type.Name, dependency.Name);
             }
         }
     }
@@ -155,7 +155,7 @@ internal class FixtureTemplate
     {
         const string template = "public {0}Test()";
 
-        AddIndented(string.Format(template, className), 1);
+        AddFormatIndented(1, template, className);
         BeginBlock(1);
 
         if (_context.UsingMocks)
@@ -163,11 +163,11 @@ internal class FixtureTemplate
             const string mockRepositoryTemplate = "_mockRepository = new MockRepository(MockBehavior.Default);";
             const string mockTemplate = "_{0} = _mockRepository.Create<{1}>();";
 
-            AddIndented(mockRepositoryTemplate, 2);
+            AddIndented(2, mockRepositoryTemplate);
 
             foreach (var dependency in _context.Interfaces)
             {
-                AddIndented(string.Format(mockTemplate, dependency.Name, dependency.Type.Name), 2);
+                AddFormatIndented(2, mockTemplate, dependency.Name, dependency.Type.Name);
             }
         }
 
@@ -175,7 +175,7 @@ internal class FixtureTemplate
 
         foreach (var dependency in _context.Classes)
         {
-            AddIndented(string.Format(classTemplate, dependency.Name, dependency.Type.Name), 2);
+            AddFormatIndented(2, classTemplate, dependency.Name, dependency.Type.Name);
         }
 
         EndBlock(1);
@@ -186,7 +186,7 @@ internal class FixtureTemplate
         const string methodTemplate = "private {0} CreateSystemUnderTestInstance()";
         const string constructorTemplate = "return new {0}({1});";
 
-        AddIndented(string.Format(methodTemplate, className), 1);
+        AddFormatIndented(1, methodTemplate, className);
         BeginBlock(1);
 
         var parameters = new string[_fixtureModel.Dependencies.Count];
@@ -204,13 +204,13 @@ internal class FixtureTemplate
             {
                 var name = _context.Classes.Single(x => x.Type == dependency).Name;
 
-                parameters[i++] =  $"_{name}";
+                parameters[i++] = $"_{name}";
             }
         }
 
         var joined = string.Join(", ", parameters);
 
-        AddIndented(string.Format(constructorTemplate, className, joined), 2);
+        AddFormatIndented(2, constructorTemplate, className, joined);
 
         EndBlock(1);
     }
@@ -221,7 +221,7 @@ internal class FixtureTemplate
         const string syncMethodTemplate = "public void Test_{0}()";
         const string asyncMethodTemplate = "public async Task Test_{0}()";
         const string arrangeComment = "// Arrange";
-        const string createSutInstanceTemplate = "var sut = CreateSystemUnderTestInstance();"; 
+        const string createSutInstanceTemplate = "var sut = CreateSystemUnderTestInstance();";
         const string actComment = "// Act";
         const string assertComment = "// Assert";
 
@@ -229,30 +229,30 @@ internal class FixtureTemplate
         {
             var name = method.Name;
 
-            AddIndented(testTemplate, 1);
+            AddIndented(1, testTemplate);
 
             if (method.IsAsync)
             {
-                AddIndented(string.Format(asyncMethodTemplate, name), 1);
+                AddFormatIndented(1, asyncMethodTemplate, name);
             }
             else
             {
-                AddIndented(string.Format(syncMethodTemplate, name), 1);
+                AddFormatIndented(1, syncMethodTemplate, name);
             }
 
             BeginBlock(1);
 
-            AddIndented(arrangeComment, 2);
+            AddIndented(2, arrangeComment);
 
-            AddIndented(createSutInstanceTemplate, 2);
-
-            _builder.AppendLine();
-
-            AddIndented(actComment, 2);
+            AddIndented(2, createSutInstanceTemplate);
 
             _builder.AppendLine();
 
-            AddIndented(assertComment, 2);
+            AddIndented(2, actComment);
+
+            _builder.AppendLine();
+
+            AddIndented(2, assertComment);
 
             EndBlock(1);
 
@@ -262,16 +262,21 @@ internal class FixtureTemplate
 
     private void BeginBlock(int indentationLevel)
     {
-        AddIndented("{", indentationLevel);
+        AddIndented(indentationLevel, "{");
     }
 
     private void EndBlock(int indentationLevel)
     {
-        AddIndented("}", indentationLevel);
+        AddIndented(indentationLevel, "}");
     }
 
-    private void AddIndented(string value, int level)
+    private void AddIndented(int level, string value)
     {
         _builder.AppendLine(new string(' ', level * 4) + value);
+    }
+
+    private void AddFormatIndented(int level, string value, params object[] args)
+    {
+        _builder.AppendFormat(new string(' ', level * 4) + value + Environment.NewLine, args);
     }
 }

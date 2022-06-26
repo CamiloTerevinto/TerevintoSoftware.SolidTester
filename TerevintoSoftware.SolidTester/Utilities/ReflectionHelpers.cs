@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using TerevintoSoftware.SolidTester.Configuration;
 using TerevintoSoftware.SolidTester.Models;
 
 namespace TerevintoSoftware.SolidTester.Utilities;
@@ -7,13 +8,12 @@ internal static class ReflectionHelpers
 {
     private const BindingFlags _commonFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
 
-    internal static FixtureModel BuildModel(string baseNamespace, Type target)
+    internal static FixtureModel BuildModel(string baseTestNamespace, Type target)
     {
         return new FixtureModel
         {
             ClassName = target.Name,
-            ClassNamespace = null!,
-            BaseNamespace = baseNamespace,
+            ClassNamespace = GetClassNamespace(target, baseTestNamespace),
             RequiredUsings = FindReferencedUsingsForType(target),
             Dependencies = FindConstructorDependencies(target),
             Methods = FindMethodsInClass(target)
@@ -85,5 +85,35 @@ internal static class ReflectionHelpers
                 IsAsync = taskType.IsAssignableFrom(m.ReturnType)
             })
             .ToArray();
+    }
+
+    internal static IReadOnlyCollection<Type> FindTypesInAssembly(Assembly assembly, ServiceSearchStrategy serviceSearchStrategy)
+    {
+        var types = assembly.GetTypes().Where(x => x.IsClass && x.MemberType == MemberTypes.TypeInfo && x.GetInterfaces().Length > 0);
+
+        if (serviceSearchStrategy == ServiceSearchStrategy.PublicClasses)
+        {
+            types = types.Where(x => x.IsPublic);
+        }
+        else if (serviceSearchStrategy == ServiceSearchStrategy.InternalClasses)
+        {
+            types = types.Where(x => x.IsNotPublic);
+        }
+
+        return types.ToArray();
+    }
+
+    internal static string GetClassNamespace(Type type, string baseTestNamespace)
+    {
+        var assembly = type.Assembly;
+        var baseNamespace = assembly.GetName().Name;
+        var typeNamespace = type.Namespace?.Replace(baseNamespace!, "");
+
+        if (string.IsNullOrEmpty(typeNamespace))
+        {
+            return baseTestNamespace;
+        }
+
+        return baseTestNamespace + "." + typeNamespace;
     }
 }

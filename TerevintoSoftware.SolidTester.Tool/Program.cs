@@ -1,4 +1,6 @@
-﻿using TerevintoSoftware.SolidTester.Services;
+﻿using System.CommandLine;
+using TerevintoSoftware.SolidTester.Tool;
 
-var service = new FixtureGenerationService();
-await service.GenerateFixturesAsync();
+var rootCommand = TestGenerationOptionsBinder.BuildRootCommand();
+
+return await rootCommand.InvokeAsync(args);

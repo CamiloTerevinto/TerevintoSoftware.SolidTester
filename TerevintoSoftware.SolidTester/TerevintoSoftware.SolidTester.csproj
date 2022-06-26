@@ -1,17 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>true</IsPackable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Camilo Terevinto</Authors>
+		<PackageTags>nunit;moq;unit tests</PackageTags>
+		<PackageProjectUrl>https://github.com/CamiloTerevinto/TerevintoSoftware.SolidTester</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/CamiloTerevinto/TerevintoSoftware.SolidTester</RepositoryUrl>
+		<Description>A package for creating c# tests from classes in a .NET assembly.
+Read the README in the GitHub project for information on usage.</Description>
+		<PackageReleaseNotes>[1.0.0]: Initial release.</PackageReleaseNotes>
+		<Version>1.0.0</Version>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Copyright>Camilo Terevinto</Copyright>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\tests\SampleLibrary\SampleLibrary.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+	</ItemGroup>
 
 </Project>

@@ -4,7 +4,6 @@ namespace TerevintoSoftware.SolidTester.Models;
 
 public class FixtureModel 
 {
-    public string BaseNamespace { get; set; }
     public string ClassName { get; set; }
     public string ClassNamespace { get; set; }
 
