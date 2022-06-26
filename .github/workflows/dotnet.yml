@@ -22,4 +22,4 @@ jobs:
     - name: Package
       run: dotnet pack -o ./packaged --no-build
     - name: Publish packages
-      run: for i in ./packaged/* ; do dotnet nuget push $i -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate ; done 
+      run: for i in ./packaged/TerevintoSoftware.SolidTester* ; do dotnet nuget push $i -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate ; done 
