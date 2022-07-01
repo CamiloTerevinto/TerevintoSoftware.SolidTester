@@ -7,16 +7,16 @@ public interface ISingleDependencyService
 
 public class SingleDependencyService : ISingleDependencyService
 {
-    private readonly ISomeDependencyService _someDependencyService;
+    private readonly INoDependenciesService _dependency;
 
-    public SingleDependencyService(ISomeDependencyService someDependencyService)
+    public SingleDependencyService(INoDependenciesService someDependencyService)
     {
-        _someDependencyService = someDependencyService;
+        _dependency = someDependencyService;
     }
 
     public async Task ExecuteOperationAsync()
     {
         // no-op
-        await _someDependencyService.ExecuteOperationAsync("test");
+        await _dependency.NoOpAsyncMethod("test");
     }
 }

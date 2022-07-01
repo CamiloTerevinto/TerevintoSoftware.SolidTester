@@ -1,5 +1,6 @@
 using SampleLibrary;
 using System.Threading.Tasks;
+using System;
 using Moq;
 using NUnit;
 
@@ -7,20 +8,22 @@ namespace SampleLibrary.Tests
 {
 
     [TestFixture]
-    public class SingleDependencyServiceTest
+    public class MultipleDependenciesServiceTest
     {
         private readonly MockRepository _mockRepository;
         private readonly Mock<INoDependenciesService> _noDependenciesService;
+        private readonly SuperOptions _superOptions;
 
-        public SingleDependencyServiceTest()
+        public MultipleDependenciesServiceTest()
         {
             _mockRepository = new MockRepository(MockBehavior.Default);
             _noDependenciesService = _mockRepository.Create<INoDependenciesService>();
+            _superOptions = new SuperOptions();
         }
 
-        private SingleDependencyService CreateSystemUnderTestInstance()
+        private MultipleDependenciesService CreateSystemUnderTestInstance()
         {
-            return new SingleDependencyService(_noDependenciesService.Object);
+            return new MultipleDependenciesService(_noDependenciesService.Object, _superOptions);
         }
 
         [Test]
@@ -28,6 +31,16 @@ namespace SampleLibrary.Tests
         {
             // Arrange
             var sut = CreateSystemUnderTestInstance();
+
+            // Act
+
+            // Assert
+        }
+
+        [Test]
+        public void Test_SomeStaticMethod()
+        {
+            // Arrange
 
             // Act
 

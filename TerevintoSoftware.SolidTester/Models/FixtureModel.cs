@@ -16,5 +16,5 @@ public class TestableMethod
 {
     public string Name { get; set; }
     public bool IsAsync { get; set; }
-
+    public bool IsStatic { get; set; }
 }

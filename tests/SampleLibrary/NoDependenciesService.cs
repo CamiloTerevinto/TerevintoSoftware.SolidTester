@@ -2,16 +2,16 @@
 
 public interface INoDependenciesService
 {
-    Task NoOpAsyncMethod();
+    Task NoOpAsyncMethod(string userId);
     void NoOpSyncMethod();
 }
 
 public class NoDependenciesService : INoDependenciesService
 {
-    public async Task NoOpAsyncMethod()
+    public async Task NoOpAsyncMethod(string userId)
     {
         // no-op
-        await Task.Delay(0);
+        await Task.Delay(userId.Length);
     }
 
     public void NoOpSyncMethod()

@@ -1,31 +1,40 @@
 using SampleLibrary;
+using System;
 using System.Threading.Tasks;
 using NUnit;
 
-namespace SampleLibrary.Tests;
-
-[TestFixture]
-public class NoDependenciesServiceTest
+namespace SampleLibrary.Tests
 {
 
-    public NoDependenciesServiceTest()
+    [TestFixture]
+    public class NoDependenciesServiceTest
     {
+        private NoDependenciesService CreateSystemUnderTestInstance()
+        {
+            return new NoDependenciesService();
+        }
+
+        [Test]
+        public async Task Test_NoOpAsyncMethod()
+        {
+            // Arrange
+            var sut = CreateSystemUnderTestInstance();
+
+            // Act
+
+            // Assert
+        }
+
+        [Test]
+        public void Test_NoOpSyncMethod()
+        {
+            // Arrange
+            var sut = CreateSystemUnderTestInstance();
+
+            // Act
+
+            // Assert
+        }
+
     }
-
-    private NoDependenciesService CreateSystemUnderTestInstance()
-    {
-        return new NoDependenciesService();
-    }
-
-    [Test]
-    public async Task Test_ExecuteOperationAsync()
-    {
-        // Arrange
-        var sut = CreateSystemUnderTestInstance();
-
-        // Act
-
-        // Assert
-    }
-
 }

@@ -5,34 +5,29 @@ public class SuperOptions
     public string UserId { get; set; }
 }
 
-public interface ISomeDependencyService
-{
-    Task ExecuteOperationAsync(string userId);
-}
-
-public class SomeDependencyService : ISomeDependencyService
-{
-    public async Task ExecuteOperationAsync(string userId) { await Task.Delay(userId.Length); }
-}
-
-public interface ISuperUsefulService
+public interface IMultipleDependenciesService
 {
     Task ExecuteOperationAsync();
 }
 
-public class SuperUsefulService : ISuperUsefulService
+public class MultipleDependenciesService : IMultipleDependenciesService
 {
-    private readonly ISomeDependencyService _someDependencyService;
+    private readonly INoDependenciesService _dependency;
     private readonly SuperOptions _options;
 
-    public SuperUsefulService(ISomeDependencyService someDependencyService, SuperOptions options)
+    public MultipleDependenciesService(INoDependenciesService noDependenciesService, SuperOptions options)
     {
-        _someDependencyService = someDependencyService;
+        _dependency = noDependenciesService;
         _options = options;
     }
 
     public async Task ExecuteOperationAsync()
     {
-        await _someDependencyService.ExecuteOperationAsync(_options.UserId);
+        await _dependency.NoOpAsyncMethod(_options.UserId);
+    }
+
+    public static void SomeStaticMethod()
+    {
+        Console.WriteLine("That does nothing useful");
     }
 }

@@ -82,7 +82,8 @@ internal static class ReflectionHelpers
             .Select(m => new TestableMethod
             {
                 Name = m.Name,
-                IsAsync = taskType.IsAssignableFrom(m.ReturnType)
+                IsAsync = taskType.IsAssignableFrom(m.ReturnType),
+                IsStatic = m.IsStatic
             })
             .ToArray();
     }
