@@ -17,10 +17,9 @@ Read the README in the GitHub project for information on usage.
 		<PackageTags>nunit;moq;unit tests</PackageTags>
 		<PackageProjectUrl>https://github.com/CamiloTerevinto/TerevintoSoftware.SolidTester</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageReleaseNotes>[1.1.0]: Move to .NET 7 and fix tool installation.
-[1.0.1]: Improve generated tests, use old namespace declaration for improved compatibility.
-[1.0.0]: Initial release.</PackageReleaseNotes>
-		<Version>1.1.0</Version>
+		<PackageReleaseNotes>[1.2.0] First usable release.</PackageReleaseNotes>
+		<Version>1.2.0</Version>
+		<ToolCommandName>solid-tester</ToolCommandName>
 	</PropertyGroup>
 
 	<ItemGroup>
